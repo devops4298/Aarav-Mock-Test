@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HCF & LCM Champion — Olympiad Set 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FFFEF7;
+  --paper: #FFFFFF;
+  --ink: #0F172A;
+  --muted: #64748B;
+  --grid: #EEF2F7;
+  --primary: #4F46E5;
+  --primary-soft: #EEF2FF;
+  --accent: #F59E0B;
+  --accent-soft: #FEF3C7;
+  --success: #10B981;
+  --success-soft: #D1FAE5;
+  --error: #EF4444;
+  --error-soft: #FEE2E2;
+  --shadow: 0 1px 3px rgba(15,23,42,.06), 0 12px 28px rgba(15,23,42,.06);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+  color: var(--ink);
+  padding: 24px 16px 80px;
+  min-height: 100vh;
+}
+.container { max-width: 840px; margin: 0 auto; }
+h1, h2, h3 { font-family: 'Fredoka', sans-serif; letter-spacing: -.01em; }
+
+/* ===== Start screen ===== */
+.start, .results {
+  background: var(--paper);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+  padding: 56px 44px;
+  text-align: center;
+  border: 1px solid #F1F5F9;
+}
+.start .badge {
+  display: inline-block;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 1.2px;
+  color: var(--primary);
+  background: var(--primary-soft);
+  padding: 7px 16px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+.start h1 {
+  font-size: clamp(38px, 6vw, 60px);
+  font-weight: 700;
+  margin: 18px 0 10px;
+  line-height: 1.02;
+}
+.start h1 .accent { color: var(--accent); }
+.start .sub {
+  color: var(--muted);
+  font-size: 17px;
+  max-width: 540px;
+  margin: 0 auto 28px;
+  line-height: 1.55;
+}
+.facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 28px 0 36px;
+}
+.fact {
+  background: linear-gradient(180deg, #FAFBFF, #FFFFFF);
+  border: 1.5px solid #EEF2F7;
+  border-radius: 18px;
+  padding: 20px 14px;
+}
+.fact .ico { font-size: 22px; margin-bottom: 4px; }
+.fact .num { font-family: 'Fredoka', sans-serif; font-size: 30px; font-weight: 600; color: var(--ink); }
+.fact .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-top: 4px; font-weight: 500; }
+.start-btn, .next-btn, .restart-btn, .review-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  padding: 15px 34px;
+  background: var(--ink);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+  box-shadow: 0 4px 0 rgba(0,0,0,.18);
+}
+.start-btn:hover, .next-btn:hover:not(:disabled), .restart-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 rgba(0,0,0,.18);
+}
+.start-btn:active, .next-btn:active, .restart-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 0 rgba(0,0,0,.18);
+}
+.topics {
+  text-align: left;
+  background: #FAFBFF;
+  border: 1.5px solid #EEF2F7;
+  border-radius: 16px;
+  padding: 18px 22px;
+  margin: 0 auto 28px;
+  max-width: 560px;
+}
+.topics h3 { font-size: 14px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); font-weight: 600; margin-bottom: 8px; font-family: 'Inter', sans-serif; }
+.topics ul { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+.topics li {
+  background: white; border: 1.5px solid #E2E8F0;
+  padding: 4px 10px; border-radius: 999px; font-size: 12.5px; color: var(--ink); font-weight: 500;
+}
+
+/* ===== Quiz ===== */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--paper);
+  padding: 14px 20px;
+  border-radius: 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+  border: 1px solid #F1F5F9;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.qcount { font-family: 'Fredoka', sans-serif; font-weight: 500; color: var(--muted); font-size: 14px; text-transform: uppercase; letter-spacing: .6px; }
+.qcount .cur { color: var(--primary); font-size: 22px; font-weight: 600; }
+.timer {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 17px;
+  padding: 7px 16px; background: var(--primary-soft); color: var(--primary);
+  border-radius: 999px;
+}
+.timer.low { background: var(--error-soft); color: var(--error); animation: pulse 1s infinite; }
+@keyframes pulse { 50% { transform: scale(1.04); } }
+.progress { height: 8px; background: var(--grid); border-radius: 999px; overflow: hidden; margin-bottom: 16px; }
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  transition: width .35s ease;
+  border-radius: 999px;
+}
+
+.card {
+  background: var(--paper);
+  border-radius: 24px;
+  padding: 36px;
+  box-shadow: var(--shadow);
+  border: 1px solid #F1F5F9;
+}
+.q-illu {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+  min-height: 90px;
+  align-items: center;
+}
+.q-illu svg { max-width: 100%; height: auto; max-height: 110px; }
+.q-text {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.4;
+  margin-bottom: 26px;
+  color: var(--ink);
+}
+.q-text sup, .q-text sub { font-size: .7em; }
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.option {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 18px;
+  background: #F8FAFC;
+  border: 2px solid #E2E8F0;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: left;
+  font-family: 'Inter', sans-serif;
+  color: var(--ink);
+  transition: all .15s;
+  width: 100%;
+}
+.option:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-soft); transform: translateY(-1px); }
+.option .letter {
+  width: 30px; height: 30px; border-radius: 9px;
+  background: white; border: 2px solid #E2E8F0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 14px;
+  flex-shrink: 0;
+}
+.option .txt { flex: 1; }
+.option.selected { border-color: var(--primary); background: var(--primary-soft); }
+.option.selected .letter { background: var(--primary); color: white; border-color: var(--primary); }
+.option:disabled { cursor: default; }
+
+.action-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 28px; gap: 12px; flex-wrap: wrap;
+}
+.hint { color: var(--muted); font-size: 14px; }
+.next-btn { background: var(--primary); padding: 13px 28px; font-size: 17px; }
+.next-btn:disabled { opacity: .35; cursor: not-allowed; box-shadow: none; transform: none; }
+.next-btn.submit { background: var(--accent); }
+
+/* ===== Results ===== */
+.results h2 { font-size: 32px; margin-bottom: 6px; }
+.results .sub-r { color: var(--muted); font-size: 16px; }
+.score-big {
+  font-family: 'Fredoka', sans-serif; font-weight: 700;
+  font-size: clamp(80px, 14vw, 140px); line-height: 1;
+  color: var(--primary); margin: 28px 0 0;
+}
+.score-big .total { font-size: .45em; color: var(--muted); font-weight: 500; }
+.percent {
+  font-family: 'Fredoka', sans-serif; font-size: 28px; color: var(--accent);
+  margin-top: 4px; font-weight: 600;
+}
+.message {
+  color: var(--ink); margin: 22px auto 28px; font-size: 17px; max-width: 480px; line-height: 1.5;
+}
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.stat {
+  background: #FAFBFF; padding: 18px 14px;
+  border-radius: 16px; border: 1.5px solid #EEF2F7;
+}
+.stat .v { font-family: 'Fredoka', sans-serif; font-size: 30px; font-weight: 600; }
+.stat .l { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-top: 4px; font-weight: 500; }
+.stat.correct { background: var(--success-soft); border-color: #A7F3D0; }
+.stat.correct .v { color: var(--success); }
+.stat.wrong { background: var(--error-soft); border-color: #FECACA; }
+.stat.wrong .v { color: var(--error); }
+.button-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.review-btn { background: white; color: var(--ink); border: 2px solid var(--ink); box-shadow: none; padding: 12px 24px; font-size: 15px; }
+.review-btn:hover { background: var(--ink); color: white; }
+
+.review {
+  text-align: left; margin: 28px 0 0;
+  max-height: 520px; overflow-y: auto; padding-right: 6px;
+  border-top: 1px solid #F1F5F9; padding-top: 22px;
+}
+.review-item {
+  padding: 14px 16px; border-radius: 12px; margin-bottom: 8px;
+  background: #FFF7F7; border-left: 4px solid var(--error);
+}
+.review-item.correct { background: #F5FCF9; border-left-color: var(--success); }
+.review-item .qh { font-weight: 600; font-size: 13px; color: var(--muted); margin-bottom: 4px; font-family: 'Fredoka', sans-serif; letter-spacing: .3px; }
+.review-item .q { font-weight: 500; font-size: 14.5px; margin-bottom: 8px; line-height: 1.45; }
+.review-item .a { font-size: 13px; color: var(--muted); display: flex; gap: 16px; flex-wrap: wrap; }
+.review-item .a b { color: var(--ink); font-weight: 600; }
+.review-item.correct .a b.ok { color: var(--success); }
+.review-item .a b.bad { color: var(--error); }
+
+.hidden { display: none !important; }
+
+@media (max-width: 640px) {
+  .options { grid-template-columns: 1fr; }
+  .facts, .stat-grid { grid-template-columns: 1fr 1fr 1fr; }
+  .start, .results { padding: 36px 22px; }
+  .card { padding: 24px 20px; }
+  .q-text { font-size: 19px; }
+  body { padding: 14px 10px 60px; }
+  .topbar { padding: 12px 14px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ===== Start ===== -->
+  <div id="start" class="start">
+    <div class="badge">Set 1 · Olympiad Practice</div>
+    <h1>HCF &amp; LCM <span class="accent">Champion</span></h1>
+    <p class="sub">50 carefully crafted questions covering every flavor of HCF and LCM — basics, word problems, fractions, and olympiad twists. Beat the clock and climb the score.</p>
+    <div class="topics">
+      <h3>What's inside</h3>
+      <ul>
+        <li>HCF basics</li>
+        <li>LCM basics</li>
+        <li>Prime factorisation</li>
+        <li>Word problems</li>
+        <li>HCF × LCM</li>
+        <li>Fractions</li>
+        <li>Bells &amp; tiles</li>
+        <li>Olympiad twists</li>
+      </ul>
+    </div>
+    <div class="facts">
+      <div class="fact"><div class="ico">📝</div><div class="num">50</div><div class="lbl">Questions</div></div>
+      <div class="fact"><div class="ico">⏱️</div><div class="num">120:00</div><div class="lbl">Time Limit</div></div>
+      <div class="fact"><div class="ico">🎯</div><div class="num">4</div><div class="lbl">Choices each</div></div>
+    </div>
+    <button class="start-btn" onclick="startQuiz()">Start Quiz →</button>
+  </div>
+
+  <!-- ===== Quiz ===== -->
+  <div id="quiz" class="hidden">
+    <div class="topbar">
+      <div class="qcount">Question <span class="cur" id="qNum">1</span> <span style="color:#CBD5E1;">/</span> 50</div>
+      <div class="timer" id="timer">⏱ 120:00</div>
+    </div>
+    <div class="progress"><div class="progress-fill" id="progressFill" style="width:2%"></div></div>
+    <div class="card">
+      <div class="q-illu" id="qIllu"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="options"></div>
+      <div class="action-bar">
+        <div class="hint" id="hint">Tap an option to select, then press Next.</div>
+        <button class="next-btn" id="nextBtn" onclick="nextQ()" disabled>Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Results ===== -->
+  <div id="results" class="hidden">
+    <div class="results">
+      <h2 id="resultTitle">Quiz Complete!</h2>
+      <p class="sub-r">Here's how you did on Set 1.</p>
+      <div class="score-big"><span id="finalScore">0</span><span class="total"> / 50</span></div>
+      <div class="percent" id="finalPercent">0%</div>
+      <p class="message" id="finalMsg">…</p>
+      <div class="stat-grid">
+        <div class="stat correct"><div class="v" id="numCorrect">0</div><div class="l">Correct</div></div>
+        <div class="stat wrong"><div class="v" id="numWrong">0</div><div class="l">Wrong</div></div>
+        <div class="stat"><div class="v" id="timeUsed">--</div><div class="l">Time used</div></div>
+      </div>
+      <div class="button-row">
+        <button class="restart-btn" onclick="restart()">Try Again ↻</button>
+        <button class="review-btn" onclick="toggleReview()" id="reviewToggle">Show answer review</button>
+      </div>
+      <div class="review hidden" id="review"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   SVG illustrations
+   ============================================================ */
+function numCards(nums) {
+  const colors = ['#4F46E5', '#F59E0B', '#10B981', '#EF4444', '#8B5CF6'];
+  const w = 64, h = 80, gap = 10;
+  const totalW = nums.length * (w + gap) - gap;
+  let inner = '';
+  nums.forEach((n, i) => {
+    const c = colors[i % colors.length];
+    const x = i * (w + gap);
+    inner += `<g transform="translate(${x},0)">
+      <rect width="${w}" height="${h}" rx="12" fill="${c}" opacity="0.12"/>
+      <rect width="${w}" height="${h}" rx="12" fill="none" stroke="${c}" stroke-width="2.5"/>
+      <text x="${w/2}" y="${h/2+9}" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="${String(n).length > 3 ? 18 : 24}" font-weight="600" fill="${c}">${n}</text>
+    </g>`;
+  });
+  return `<svg viewBox="0 0 ${totalW} ${h}" xmlns="http://www.w3.org/2000/svg" style="max-width:${Math.min(totalW, 320)}px">${inner}</svg>`;
+}
+function svgFraction(nums) {
+  const colors = ['#4F46E5', '#F59E0B', '#10B981', '#8B5CF6'];
+  const w = 70, gap = 14;
+  const totalW = nums.length * (w + gap) - gap;
+  let inner = '';
+  nums.forEach((nd, i) => {
+    const c = colors[i % colors.length];
+    const x = i * (w + gap);
+    inner += `<g transform="translate(${x},0)">
+      <text x="${w/2}" y="32" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="22" font-weight="600" fill="${c}">${nd[0]}</text>
+      <line x1="8" y1="42" x2="${w-8}" y2="42" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/>
+      <text x="${w/2}" y="68" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="22" font-weight="600" fill="${c}">${nd[1]}</text>
+    </g>`;
+  });
+  return `<svg viewBox="0 0 ${totalW} 80" xmlns="http://www.w3.org/2000/svg" style="max-width:${Math.min(totalW,300)}px">${inner}</svg>`;
+}
+const svgBells = `<svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg" style="max-width:240px">
+  ${[30,120,210].map((x,i) => {
+    const colors = ['#F59E0B','#4F46E5','#10B981'];
+    const c = colors[i];
+    return `<g transform="translate(${x-25},10)">
+      <path d="M25 5 Q12 5 12 30 L12 55 L38 55 L38 30 Q38 5 25 5 Z" fill="${c}" opacity="0.85"/>
+      <rect x="23" y="0" width="4" height="8" rx="2" fill="${c}"/>
+      <circle cx="25" cy="65" r="6" fill="${c}"/>
+      <path d="M8 58 L42 58" stroke="${c}" stroke-width="2" stroke-linecap="round"/>
+      <path d="M0 85 Q25 78 50 85" stroke="${c}" stroke-width="1.5" fill="none" opacity="0.4" stroke-dasharray="3,3"/>
+    </g>`;
+  }).join('')}
+</svg>`;
+const svgRoom = `<svg viewBox="0 0 180 110" xmlns="http://www.w3.org/2000/svg" style="max-width:200px">
+  <rect x="10" y="10" width="160" height="90" fill="#EEF2FF" stroke="#4F46E5" stroke-width="2.5" rx="4"/>
+  <g stroke="#4F46E5" stroke-width="1" opacity="0.45">
+    ${[40,70,100,130,160].map(x => `<line x1="${x}" y1="10" x2="${x}" y2="100"/>`).join('')}
+    ${[40,70,100].map(y => `<line x1="10" y1="${y}" x2="170" y2="${y}"/>`).join('')}
+  </g>
+  <rect x="40" y="40" width="30" height="30" fill="#F59E0B" opacity="0.4"/>
+</svg>`;
+const svgContainers = `<svg viewBox="0 0 220 90" xmlns="http://www.w3.org/2000/svg" style="max-width:220px">
+  ${[10,80,150].map((x,i) => {
+    const colors = ['#4F46E5','#F59E0B','#10B981'];
+    const labels = ['120L','180L','240L'];
+    const c = colors[i];
+    const h = [55,65,75][i];
+    return `<g transform="translate(${x},${15+(75-h)})">
+      <path d="M5 0 L55 0 L60 ${h} L0 ${h} Z" fill="${c}" opacity="0.15"/>
+      <path d="M5 0 L55 0 L60 ${h} L0 ${h} Z" fill="none" stroke="${c}" stroke-width="2"/>
+      <rect x="-2" y="-4" width="64" height="8" rx="2" fill="${c}"/>
+      <text x="30" y="${h/2+12}" text-anchor="middle" font-family="Fredoka,sans-serif" font-size="13" font-weight="600" fill="${c}">${labels[i]}</text>
+    </g>`;
+  }).join('')}
+</svg>`;
+const svgKids = `<svg viewBox="0 0 240 80" xmlns="http://www.w3.org/2000/svg" style="max-width:240px">
+  ${Array.from({length:6}).map((_,i) => {
+    const x = 18 + i*36;
+    const c = i < 3 ? '#4F46E5' : '#F59E0B';
+    return `<g transform="translate(${x},10)">
+      <circle cx="0" cy="10" r="9" fill="${c}"/>
+      <path d="M-12 50 Q0 22 12 50 Z" fill="${c}" opacity="0.85"/>
+    </g>`;
+  }).join('')}
+  <text x="60" y="78" text-anchor="middle" font-family="Fredoka,sans-serif" font-size="11" font-weight="600" fill="#4F46E5">Boys</text>
+  <text x="180" y="78" text-anchor="middle" font-family="Fredoka,sans-serif" font-size="11" font-weight="600" fill="#F59E0B">Girls</text>
+</svg>`;
+const svgPipes = `<svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg" style="max-width:200px">
+  <rect x="60" y="40" width="80" height="40" fill="#EEF2FF" stroke="#4F46E5" stroke-width="2" rx="4"/>
+  <rect x="20" y="20" width="40" height="10" fill="#4F46E5"/>
+  <rect x="140" y="20" width="40" height="10" fill="#F59E0B"/>
+  <path d="M40 30 L40 40" stroke="#4F46E5" stroke-width="6"/>
+  <path d="M160 30 L160 40" stroke="#F59E0B" stroke-width="6"/>
+  <text x="40" y="14" text-anchor="middle" font-family="Fredoka,sans-serif" font-size="10" font-weight="600" fill="#4F46E5">A</text>
+  <text x="160" y="14" text-anchor="middle" font-family="Fredoka,sans-serif" font-size="10" font-weight="600" fill="#F59E0B">B</text>
+</svg>`;
+
+/* ============================================================
+   50 Questions
+   Each: { q (HTML), svg (HTML), choices [4], ans (0..3) }
+   ============================================================ */
+const Q = [
+  // 1
+  { q: "Find the HCF of <b>12</b> and <b>18</b>.", svg: numCards([12,18]),
+    choices: ["3", "6", "9", "12"], ans: 1 },
+  // 2
+  { q: "Find the LCM of <b>12</b> and <b>18</b>.", svg: numCards([12,18]),
+    choices: ["24", "30", "36", "72"], ans: 2 },
+  // 3
+  { q: "Find the HCF of <b>36</b> and <b>48</b>.", svg: numCards([36,48]),
+    choices: ["6", "12", "18", "24"], ans: 1 },
+  // 4
+  { q: "Find the LCM of <b>8</b> and <b>12</b>.", svg: numCards([8,12]),
+    choices: ["16", "20", "24", "48"], ans: 2 },
+  // 5
+  { q: "Find the HCF of <b>25</b> and <b>40</b>.", svg: numCards([25,40]),
+    choices: ["5", "8", "10", "15"], ans: 0 },
+  // 6
+  { q: "Find the LCM of <b>9</b> and <b>15</b>.", svg: numCards([9,15]),
+    choices: ["30", "45", "60", "135"], ans: 1 },
+  // 7
+  { q: "Find the HCF of <b>100</b> and <b>75</b>.", svg: numCards([100,75]),
+    choices: ["15", "20", "25", "50"], ans: 2 },
+  // 8
+  { q: "Find the LCM of <b>10</b>, <b>15</b> and <b>20</b>.", svg: numCards([10,15,20]),
+    choices: ["45", "60", "90", "120"], ans: 1 },
+  // 9
+  { q: "Find the HCF of <b>24</b>, <b>36</b> and <b>60</b>.", svg: numCards([24,36,60]),
+    choices: ["6", "12", "18", "24"], ans: 1 },
+  // 10
+  { q: "Find the LCM of <b>6</b>, <b>9</b> and <b>12</b>.", svg: numCards([6,9,12]),
+    choices: ["18", "27", "36", "72"], ans: 2 },
+  // 11
+  { q: "The HCF of two numbers is <b>5</b> and their product is <b>150</b>. Find their LCM.",
+    svg: numCards(['HCF=5','×','LCM=?']),
+    choices: ["10", "25", "30", "75"], ans: 2 },
+  // 12
+  { q: "What is the value of HCF(16, 20) × LCM(16, 20)?",
+    svg: numCards([16,20]),
+    choices: ["180", "240", "320", "400"], ans: 2 },
+  // 13
+  { q: "Find the HCF of <b>7</b> and <b>13</b>.",
+    svg: numCards([7,13]),
+    choices: ["1", "7", "13", "91"], ans: 0 },
+  // 14
+  { q: "Find the LCM of <b>8</b> and <b>15</b> (they are co-prime).",
+    svg: numCards([8,15]),
+    choices: ["23", "60", "90", "120"], ans: 3 },
+  // 15
+  { q: "What is the smallest number that is divisible by <b>4</b>, <b>5</b> and <b>6</b>?",
+    svg: numCards([4,5,6]),
+    choices: ["30", "40", "60", "120"], ans: 2 },
+  // 16
+  { q: "What is the largest number that divides both <b>60</b> and <b>75</b> exactly?",
+    svg: numCards([60,75]),
+    choices: ["5", "10", "15", "25"], ans: 2 },
+  // 17
+  { q: "Find the largest number which divides <b>76</b> and <b>151</b>, leaving remainders <b>4</b> and <b>7</b> respectively.",
+    svg: numCards([76,151]),
+    choices: ["36", "48", "72", "144"], ans: 2 },
+  // 18
+  { q: "Find the smallest number which, when divided by <b>6</b>, <b>9</b> and <b>15</b>, leaves remainder <b>4</b> in each case.",
+    svg: numCards([6,9,15]),
+    choices: ["49", "94", "184", "274"], ans: 1 },
+  // 19
+  { q: "Three bells toll at intervals of <b>6</b>, <b>12</b> and <b>18</b> minutes. They toll together at 8:00 AM. When will they next toll together?",
+    svg: svgBells,
+    choices: ["8:18 AM", "8:30 AM", "8:36 AM", "9:00 AM"], ans: 2 },
+  // 20
+  { q: "A rectangular floor is <b>16 m by 24 m</b>. Find the side of the largest square tile that can pave it completely.",
+    svg: svgRoom,
+    choices: ["4 m", "6 m", "8 m", "12 m"], ans: 2 },
+  // 21
+  { q: "Using the largest square tile from the previous question, how many such tiles are needed to pave the <b>16 m × 24 m</b> floor?",
+    svg: svgRoom,
+    choices: ["6", "8", "12", "24"], ans: 0 },
+  // 22
+  { q: "Using prime factorisation, find the HCF of <b>18</b> and <b>24</b>.<br><span style='font-size:14px;color:#64748B'>18 = 2 × 3², &nbsp; 24 = 2³ × 3</span>",
+    svg: numCards([18,24]),
+    choices: ["2", "3", "6", "12"], ans: 2 },
+  // 23
+  { q: "Using prime factorisation, find the LCM of <b>18</b> and <b>24</b>.<br><span style='font-size:14px;color:#64748B'>18 = 2 × 3², &nbsp; 24 = 2³ × 3</span>",
+    svg: numCards([18,24]),
+    choices: ["36", "48", "72", "144"], ans: 2 },
+  // 24
+  { q: "Two numbers are in the ratio <b>2 : 3</b> and their HCF is <b>6</b>. Find their LCM.",
+    svg: numCards(['2 : 3','HCF=6']),
+    choices: ["18", "24", "36", "72"], ans: 2 },
+  // 25
+  { q: "Find the HCF of the fractions <b>2/3</b>, <b>4/5</b>, <b>6/7</b>.<br><span style='font-size:14px;color:#64748B'>HCF of fractions = HCF(numerators) / LCM(denominators)</span>",
+    svg: svgFraction([['2','3'],['4','5'],['6','7']]),
+    choices: ["2/35", "2/105", "1/105", "6/105"], ans: 1 },
+  // 26
+  { q: "Find the LCM of the fractions <b>1/3</b>, <b>2/9</b>, <b>5/6</b>.<br><span style='font-size:14px;color:#64748B'>LCM of fractions = LCM(numerators) / HCF(denominators)</span>",
+    svg: svgFraction([['1','3'],['2','9'],['5','6']]),
+    choices: ["5/3", "10/3", "10/9", "5/18"], ans: 1 },
+  // 27
+  { q: "Find the greatest <b>4-digit</b> number which is exactly divisible by <b>15</b>, <b>25</b> and <b>40</b>.",
+    svg: numCards([15,25,40]),
+    choices: ["9000", "9600", "9800", "9990"], ans: 1 },
+  // 28
+  { q: "Find the smallest <b>4-digit</b> number which is exactly divisible by <b>12</b>, <b>16</b> and <b>18</b>.",
+    svg: numCards([12,16,18]),
+    choices: ["1008", "1044", "1152", "1296"], ans: 0 },
+  // 29
+  { q: "The product of HCF and LCM of two numbers is <b>24</b>. If one of the numbers is <b>6</b>, find the other.",
+    svg: numCards(['HCF × LCM = 24','one = 6']),
+    choices: ["2", "4", "8", "12"], ans: 1 },
+  // 30
+  { q: "Two numbers have HCF <b>11</b> and LCM <b>7700</b>. If one number is <b>275</b>, find the other.",
+    svg: numCards([275,'?']),
+    choices: ["143", "275", "308", "385"], ans: 2 },
+  // 31
+  { q: "The HCF of two numbers is <b>16</b> and their LCM is <b>160</b>. If one number is <b>32</b>, find the other.",
+    svg: numCards([32,'?']),
+    choices: ["40", "60", "80", "96"], ans: 2 },
+  // 32
+  { q: "What is the sum of digits of the LCM of <b>12</b> and <b>16</b>?",
+    svg: numCards([12,16]),
+    choices: ["6", "9", "12", "15"], ans: 2 },
+  // 33
+  { q: "The product of two numbers is <b>2028</b> and their HCF is <b>13</b>. How many such pairs of numbers are possible?",
+    svg: numCards(['Product = 2028','HCF = 13']),
+    choices: ["1", "2", "3", "4"], ans: 1 },
+  // 34
+  { q: "The sum of two numbers is <b>216</b> and their HCF is <b>27</b>. How many such pairs of numbers are possible?",
+    svg: numCards(['Sum = 216','HCF = 27']),
+    choices: ["1", "2", "3", "4"], ans: 1 },
+  // 35
+  { q: "Three numbers are in the ratio <b>1 : 2 : 3</b> and their HCF is <b>12</b>. Find their LCM.",
+    svg: numCards(['1 : 2 : 3','HCF=12']),
+    choices: ["36", "60", "72", "144"], ans: 2 },
+  // 36
+  { q: "Find the number nearest to <b>10,000</b> which is exactly divisible by <b>4</b>, <b>5</b>, <b>6</b> and <b>7</b>.",
+    svg: numCards([4,5,6,7]),
+    choices: ["9870", "9990", "10080", "10200"], ans: 2 },
+  // 37
+  { q: "Five bells begin to toll together at intervals of <b>6, 7, 8, 9, 12</b> seconds. After how many seconds will they all toll together again?",
+    svg: svgBells,
+    choices: ["72", "168", "336", "504"], ans: 3 },
+  // 38
+  { q: "From the previous question (bells at 6, 7, 8, 9, 12 sec), how many times will they toll together in <b>1 hour</b>, not counting the start?",
+    svg: svgBells,
+    choices: ["5", "6", "7", "10"], ans: 2 },
+  // 39
+  { q: "Find the greatest number that divides <b>99</b>, <b>123</b> and <b>183</b> leaving the same remainder in each case.",
+    svg: numCards([99,123,183]),
+    choices: ["6", "12", "18", "24"], ans: 1 },
+  // 40
+  { q: "A merchant has <b>120 L</b>, <b>180 L</b> and <b>240 L</b> of three different oils. Find the largest size of equal containers that can fill all three without mixing.",
+    svg: svgContainers,
+    choices: ["30 L", "40 L", "60 L", "120 L"], ans: 2 },
+  // 41
+  { q: "From the previous question, what is the <b>minimum</b> number of containers needed in total?",
+    svg: svgContainers,
+    choices: ["6", "7", "9", "12"], ans: 2 },
+  // 42
+  { q: "What is the <b>unit digit</b> of the LCM of <b>2, 4, 6, 8, 10</b>?",
+    svg: numCards([2,4,6,8,10]),
+    choices: ["0", "2", "4", "6"], ans: 0 },
+  // 43
+  { q: "What is the HCF of any three consecutive even numbers (like 4, 6, 8 or 10, 12, 14)?",
+    svg: numCards(['n','n+2','n+4']),
+    choices: ["1", "2", "4", "6"], ans: 1 },
+  // 44
+  { q: "Find the LCM of two consecutive odd numbers <b>9</b> and <b>11</b>.",
+    svg: numCards([9,11]),
+    choices: ["1", "20", "99", "198"], ans: 2 },
+  // 45
+  { q: "A teacher has <b>24 boys</b> and <b>36 girls</b>. She wants to form equal groups such that each group has only boys or only girls. What is the largest possible group size?",
+    svg: svgKids,
+    choices: ["6", "8", "12", "18"], ans: 2 },
+  // 46
+  { q: "Find the smallest number that leaves remainders <b>3, 4, 5</b> when divided by <b>4, 5, 6</b> respectively.<br><span style='font-size:14px;color:#64748B'>Notice: each remainder is one less than its divisor.</span>",
+    svg: numCards([4,5,6]),
+    choices: ["29", "59", "119", "179"], ans: 1 },
+  // 47
+  { q: "Find the HCF of <b>408</b> and <b>1032</b> using the Euclidean algorithm.",
+    svg: numCards([408,1032]),
+    choices: ["8", "12", "24", "48"], ans: 2 },
+  // 48
+  { q: "If HCF(a, b) = <b>12</b> and LCM(a, b) = <b>240</b>, find the product <b>a × b</b>.",
+    svg: numCards(['HCF=12','LCM=240']),
+    choices: ["288", "1440", "2880", "5760"], ans: 2 },
+  // 49
+  { q: "Find the greatest number which divides <b>1305</b>, <b>4665</b> and <b>6905</b> leaving the same remainder in each case.",
+    svg: numCards([1305,4665,6905]),
+    choices: ["560", "1120", "1400", "2240"], ans: 1 },
+  // 50
+  { q: "The LCM of two numbers is <b>12 times</b> their HCF. The sum of HCF and LCM is <b>403</b>. If one of the numbers is <b>93</b>, find the other. <span style='font-size:13px;color:#F59E0B;font-weight:600;'>★ Olympiad</span>",
+    svg: numCards([93,'?']),
+    choices: ["62", "93", "124", "248"], ans: 2 }
+];
+
+/* ============================================================
+   App logic
+   ============================================================ */
+let current = 0, picks = [], score = 0, timerInterval, secsLeft = 7200, startTime;
+
+function startQuiz() {
+  document.getElementById('start').classList.add('hidden');
+  document.getElementById('quiz').classList.remove('hidden');
+  current = 0; picks = []; score = 0; secsLeft = 7200;
+  startTime = Date.now();
+  renderQ();
+  startTimer();
+}
+
+function startTimer() {
+  updateTimer();
+  timerInterval = setInterval(() => {
+    secsLeft--;
+    updateTimer();
+    if (secsLeft <= 0) { clearInterval(timerInterval); finish(); }
+  }, 1000);
+}
+function updateTimer() {
+  const m = Math.floor(secsLeft / 60), s = secsLeft % 60;
+  const t = document.getElementById('timer');
+  t.textContent = `⏱ ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  if (secsLeft <= 300) t.classList.add('low'); else t.classList.remove('low');
+}
+
+function renderQ() {
+  const q = Q[current];
+  document.getElementById('qNum').textContent = current + 1;
+  document.getElementById('qText').innerHTML = q.q;
+  document.getElementById('qIllu').innerHTML = q.svg || '';
+  document.getElementById('progressFill').style.width = ((current + 1) / 50 * 100) + '%';
+  const opts = document.getElementById('options');
+  opts.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.choices.forEach((c, i) => {
+    const b = document.createElement('button');
+    b.className = 'option';
+    b.type = 'button';
+    b.innerHTML = `<span class="letter">${letters[i]}</span><span class="txt">${c}</span>`;
+    b.onclick = () => selectOpt(i, b);
+    if (picks[current] === i) b.classList.add('selected');
+    opts.appendChild(b);
+  });
+  const btn = document.getElementById('nextBtn');
+  btn.disabled = picks[current] === undefined;
+  if (current === 49) { btn.textContent = 'Submit ✓'; btn.classList.add('submit'); }
+  else { btn.textContent = 'Next →'; btn.classList.remove('submit'); }
+  document.getElementById('hint').textContent = picks[current] === undefined
+    ? 'Tap an option to select, then press ' + (current === 49 ? 'Submit.' : 'Next.')
+    : (current === 49 ? 'Ready to submit your quiz?' : 'Press Next when ready.');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function selectOpt(i, btn) {
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  btn.classList.add('selected');
+  picks[current] = i;
+  document.getElementById('nextBtn').disabled = false;
+  document.getElementById('hint').textContent = current === 49 ? 'Ready to submit your quiz?' : 'Press Next when ready.';
+}
+
+function nextQ() {
+  if (current === 49) { finish(); return; }
+  current++;
+  renderQ();
+}
+
+function finish() {
+  clearInterval(timerInterval);
+  score = 0;
+  picks.forEach((p, i) => { if (p === Q[i].ans) score++; });
+  for (let i = 0; i < 50; i++) if (picks[i] === undefined) picks[i] = -1;
+  const elapsed = Math.floor((Date.now() - startTime) / 1000);
+  const em = Math.floor(elapsed / 60), es = elapsed % 60;
+  document.getElementById('quiz').classList.add('hidden');
+  document.getElementById('results').classList.remove('hidden');
+  document.getElementById('finalScore').textContent = score;
+  const pct = Math.round(score / 50 * 100);
+  document.getElementById('finalPercent').textContent = pct + '%';
+  document.getElementById('numCorrect').textContent = score;
+  document.getElementById('numWrong').textContent = 50 - score;
+  document.getElementById('timeUsed').textContent = `${em}:${String(es).padStart(2,'0')}`;
+  let msg, title;
+  if (pct >= 90)      { title = "Outstanding! 🏆"; msg = "You're an HCF & LCM master. Olympiad-level performance — keep this up!"; }
+  else if (pct >= 75) { title = "Excellent work! 🌟"; msg = "Very strong score. Polish the few you missed and you'll be unbeatable."; }
+  else if (pct >= 60) { title = "Good going! 👍";    msg = "Solid foundation. Review the trickier word problems and try again."; }
+  else if (pct >= 40) { title = "Keep training! 💪"; msg = "You've got the basics. Spend time on factor trees and the LCM/HCF relationship."; }
+  else                { title = "Don't give up! 🌱"; msg = "Every champion started here. Revisit the basics of factors and multiples, then come back."; }
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('finalMsg').textContent = msg;
+  const rev = document.getElementById('review');
+  const letters = ['A','B','C','D'];
+  rev.innerHTML = Q.map((q, i) => {
+    const correct = picks[i] === q.ans;
+    const yours = picks[i] === -1 ? '<span style="color:#94A3B8">Not answered</span>'
+                                  : `${letters[picks[i]]}. ${q.choices[picks[i]]}`;
+    const corr  = `${letters[q.ans]}. ${q.choices[q.ans]}`;
+    return `<div class="review-item ${correct ? 'correct' : ''}">
+      <div class="qh">Q${i+1} · ${correct ? 'Correct' : 'Incorrect'}</div>
+      <div class="q">${q.q}</div>
+      <div class="a">
+        <span>Your answer: <b class="${correct ? 'ok' : 'bad'}">${yours}</b></span>
+        <span>Correct: <b class="ok">${corr}</b></span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleReview() {
+  const rev = document.getElementById('review');
+  const btn = document.getElementById('reviewToggle');
+  rev.classList.toggle('hidden');
+  btn.textContent = rev.classList.contains('hidden') ? 'Show answer review' : 'Hide answer review';
+}
+
+function restart() { location.reload(); }
+</script>
+</body>
+</html>

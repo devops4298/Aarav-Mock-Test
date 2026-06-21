@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HCF × LCM in Real Life — Three Stories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F6F4EE;
+    --paper: #FFFFFF;
+    --ink: #15151A;
+    --muted: #6B6B72;
+    --line: #E5E2DA;
+    --line-soft: #EEEAE0;
+    --c1: #B3431E;  /* cookie rust */
+    --c1-soft: #FCEFE3;
+    --c2: #0E7C66;  /* track teal */
+    --c2-soft: #DCF1EC;
+    --c3: #6D28D9;  /* festival violet */
+    --c3-soft: #ECE3FB;
+    --shadow: 0 1px 2px rgba(15,15,20,.04), 0 12px 32px rgba(15,15,20,.06);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--ink); }
+  body {
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding: 64px 24px 96px;
+  }
+  .wrap { max-width: 840px; margin: 0 auto; }
+
+  /* ===== Header ===== */
+  header { text-align: left; margin-bottom: 80px; max-width: 720px; }
+  .eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted);
+    display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+  }
+  .eyebrow::after {
+    content: ''; flex: 1; height: 1px; background: var(--line);
+    margin-left: 4px;
+  }
+  header h1 {
+    font-family: 'Newsreader', serif;
+    font-weight: 500;
+    font-size: clamp(40px, 6.5vw, 68px);
+    line-height: 1;
+    letter-spacing: -.02em;
+    margin-bottom: 24px;
+  }
+  header h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--c1);
+  }
+  header .lede {
+    font-family: 'Newsreader', serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.55;
+    color: #3D3D44;
+    max-width: 600px;
+  }
+  header .formula-strip {
+    margin-top: 36px; padding: 18px 22px;
+    background: var(--paper); border-radius: 14px;
+    border: 1px solid var(--line);
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  header .formula-strip .lbl {
+    font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase;
+    color: var(--muted); font-weight: 600;
+  }
+  header .formula-strip .eq {
+    font-family: 'Newsreader', serif;
+    font-style: italic; font-size: 22px; font-weight: 500;
+    letter-spacing: .01em;
+  }
+  header .formula-strip .eq b { font-style: normal; font-weight: 600; }
+
+  /* ===== Chapter card ===== */
+  .chapter {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    overflow: hidden;
+    margin-bottom: 56px;
+    box-shadow: var(--shadow);
+  }
+  .chapter-head {
+    padding: 36px 44px 28px;
+    border-bottom: 1px solid var(--line-soft);
+    position: relative;
+  }
+  .chapter-num {
+    font-family: 'Newsreader', serif;
+    font-style: italic; font-weight: 500;
+    font-size: 14px; letter-spacing: .05em;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .chapter-title {
+    font-family: 'Newsreader', serif;
+    font-weight: 500;
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.1;
+    letter-spacing: -.01em;
+    margin-bottom: 12px;
+  }
+  .chapter-title em { font-style: italic; color: var(--accent); font-weight: 400; }
+  .chapter-tag {
+    font-size: 12px; font-weight: 600; letter-spacing: 1.4px;
+    text-transform: uppercase; color: var(--muted);
+  }
+
+  .chapter-body { padding: 36px 44px; }
+  .story p {
+    font-family: 'Newsreader', serif;
+    font-size: 18px; line-height: 1.65;
+    margin-bottom: 14px;
+    color: #2A2A30;
+  }
+  .story p:last-child { margin-bottom: 0; }
+  .story b {
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 1px 6px; border-radius: 4px;
+  }
+  .story .pull {
+    border-left: 3px solid var(--accent);
+    padding: 4px 0 4px 18px;
+    margin: 22px 0;
+    font-style: italic;
+    color: #3D3D44;
+    font-size: 19px;
+  }
+
+  /* ===== Canvas frame ===== */
+  .canvas-frame {
+    margin: 32px 0 28px;
+    background: var(--accent-soft);
+    border-radius: 18px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .canvas-frame canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+  .canvas-caption {
+    margin-top: 14px;
+    font-size: 13px; color: var(--muted);
+    font-style: italic;
+    text-align: center;
+  }
+  .canvas-controls {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 16px;
+  }
+  .canvas-controls button {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px; font-weight: 600;
+    padding: 8px 16px;
+    background: var(--paper); color: var(--ink);
+    border: 1.5px solid var(--ink);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .canvas-controls button:hover { background: var(--ink); color: var(--paper); }
+  .canvas-controls button.primary {
+    background: var(--accent); color: white; border-color: var(--accent);
+  }
+  .canvas-controls button.primary:hover { background: var(--ink); border-color: var(--ink); }
+
+  /* ===== Knowns ===== */
+  .knowns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin: 28px 0;
+  }
+  .known {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .known .k {
+    font-size: 11px; font-weight: 600; letter-spacing: 1.2px;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .known .v {
+    font-family: 'Newsreader', serif;
+    font-size: 26px; font-weight: 500;
+    line-height: 1.1;
+  }
+  .known.unknown .v { color: var(--accent); font-style: italic; }
+
+  /* ===== Steps ===== */
+  .steps { margin-top: 36px; }
+  .steps-head {
+    font-family: 'Newsreader', serif;
+    font-weight: 500; font-size: 22px;
+    margin-bottom: 6px;
+  }
+  .steps-sub { color: var(--muted); font-size: 14px; margin-bottom: 22px; }
+
+  .step {
+    border-top: 1px solid var(--line-soft);
+    padding: 18px 0;
+  }
+  .step-btn {
+    width: 100%; text-align: left;
+    background: none; border: none;
+    font-family: inherit; cursor: pointer;
+    display: flex; align-items: center; gap: 14px;
+    padding: 0;
+  }
+  .step-btn .step-num {
+    flex-shrink: 0;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1.5px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Newsreader', serif;
+    font-style: italic; font-size: 15px; font-weight: 500;
+    color: var(--muted);
+    transition: all .2s;
+  }
+  .step-btn .step-label {
+    flex: 1;
+    font-size: 16px; font-weight: 500;
+    color: var(--ink);
+  }
+  .step-btn .step-chev {
+    color: var(--muted); font-size: 14px;
+    transition: transform .2s;
+  }
+  .step.open .step-btn .step-num {
+    background: var(--accent); color: white; border-color: var(--accent);
+  }
+  .step.open .step-btn .step-chev { transform: rotate(90deg); }
+
+  .step-body {
+    max-height: 0; overflow: hidden;
+    transition: max-height .4s ease, margin .4s ease;
+    margin-top: 0;
+  }
+  .step.open .step-body {
+    max-height: 1200px;
+    margin-top: 16px;
+  }
+  .step-body-inner {
+    padding-left: 46px;
+    font-size: 15.5px; line-height: 1.65; color: #2A2A30;
+  }
+  .step-body-inner p { margin-bottom: 12px; }
+  .step-body-inner p:last-child { margin-bottom: 0; }
+  .math {
+    background: var(--bg);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    margin: 14px 0;
+    border-radius: 0 8px 8px 0;
+    font-family: 'Newsreader', serif;
+    font-size: 17px; line-height: 1.8;
+  }
+  .math .hl { color: var(--accent); font-weight: 600; }
+
+  /* Answer reveal */
+  .answer-card {
+    background: var(--accent);
+    color: white;
+    border-radius: 18px;
+    padding: 32px 36px;
+    margin-top: 32px;
+    display: none;
+  }
+  .answer-card.show { display: block; animation: rise .5s ease; }
+  @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .answer-card .lbl {
+    font-size: 11px; font-weight: 600; letter-spacing: 1.6px;
+    text-transform: uppercase; opacity: .75;
+    margin-bottom: 8px;
+  }
+  .answer-card .ans {
+    font-family: 'Newsreader', serif;
+    font-size: clamp(28px, 4vw, 38px);
+    font-weight: 500; line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .answer-card .ans em { font-style: italic; }
+  .answer-card .verify {
+    font-size: 14px;
+    background: rgba(255,255,255,.15);
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-family: 'Newsreader', serif;
+    line-height: 1.6;
+  }
+
+  /* Try at home */
+  .try-home {
+    margin-top: 28px;
+    padding: 22px 26px;
+    background: var(--bg);
+    border-radius: 14px;
+    border: 1px dashed var(--line);
+  }
+  .try-home .lbl {
+    font-size: 11px; font-weight: 600; letter-spacing: 1.4px;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .try-home p {
+    font-family: 'Newsreader', serif;
+    font-style: italic; font-size: 16px; line-height: 1.6;
+    color: #3D3D44;
+  }
+
+  /* ===== Footer ===== */
+  footer {
+    margin-top: 80px;
+    padding-top: 40px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+  }
+  footer .signature {
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  footer .signature em { color: var(--c1); }
+  footer .meta {
+    font-size: 13px; color: var(--muted);
+  }
+
+  /* Accent themes */
+  [data-accent="c1"] { --accent: var(--c1); --accent-soft: var(--c1-soft); }
+  [data-accent="c2"] { --accent: var(--c2); --accent-soft: var(--c2-soft); }
+  [data-accent="c3"] { --accent: var(--c3); --accent-soft: var(--c3-soft); }
+
+  @media (max-width: 640px) {
+    body { padding: 32px 16px 60px; }
+    .chapter-head, .chapter-body { padding-left: 24px; padding-right: 24px; }
+    .canvas-frame { padding: 14px; }
+    .step-body-inner { padding-left: 12px; }
+    header { margin-bottom: 48px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== Header ===== -->
+  <header>
+    <div class="eyebrow">A real-life mathematics zine · Volume 01</div>
+    <h1>HCF × LCM, <em>told in three stories.</em></h1>
+    <p class="lede">A pocket-sized field guide for a curious kid — and the grown-up explaining it. Each story is a real moment where one quiet rule does the work behind the scenes.</p>
+    <div class="formula-strip">
+      <div class="lbl">The rule, once</div>
+      <div class="eq"><b>HCF</b> × <b>LCM</b> = the product of the two numbers themselves.</div>
+    </div>
+  </header>
+
+  <!-- ===================================================== -->
+  <!-- CHAPTER 1: COOKIES                                    -->
+  <!-- ===================================================== -->
+  <article class="chapter" data-accent="c1">
+    <div class="chapter-head">
+      <div class="chapter-num">Chapter 01 · Kitchen</div>
+      <h2 class="chapter-title">The <em>Cookie Jar</em> Mystery</h2>
+      <div class="chapter-tag">Counting · Sharing · Tidy Rows</div>
+    </div>
+    <div class="chapter-body">
+
+      <div class="story">
+        <p>Grandma bakes cookies every weekend for her two grandkids, Maya and Arjun. She has two rules.</p>
+        <p><b>One.</b> Every cookie in Maya's box must be the same kind, and every cookie in Arjun's box must be the same kind — but Maya and Arjun can get different kinds.</p>
+        <p><b>Two.</b> She wants the boxes to look tidy — same number of cookies in each row.</p>
+        <p class="pull">"The largest row size that works for <i>both</i> boxes is 6 cookies. And if I lined up all of Maya's cookies in one straight row, and all of Arjun's in another, the smallest length where the two rows would end at the same spot is 72 cookies."</p>
+        <p>She also lets slip: <b>Maya has 24 cookies</b>. How many cookies are in Arjun's box?</p>
+      </div>
+
+      <div class="canvas-frame">
+        <canvas id="canvasCookies" width="900" height="380"></canvas>
+        <div class="canvas-controls">
+          <button class="primary" onclick="cookies.run()">▶ Arrange in rows of 6</button>
+          <button onclick="cookies.reset()">↺ Reset</button>
+        </div>
+        <div class="canvas-caption">Two boxes, one shared rule. Watch the rows fall into place.</div>
+      </div>
+
+      <div class="knowns">
+        <div class="known"><div class="k">HCF</div><div class="v">6</div></div>
+        <div class="known"><div class="k">LCM</div><div class="v">72</div></div>
+        <div class="known"><div class="k">Maya</div><div class="v">24</div></div>
+        <div class="known unknown"><div class="k">Arjun</div><div class="v">?</div></div>
+      </div>
+
+      <div class="steps">
+        <div class="steps-head">The reasoning, deliberately.</div>
+        <div class="steps-sub">Open each step in order. Try to think one move ahead before you tap.</div>
+
+        <div class="step">
+          <button class="step-btn" onclick="toggleStep(this)">
+            <span class="step-num">i</span>
+            <span class="step-label">What is Grandma actually telling us?</span>
+            <span class="step-chev">›</span>
+          </button>
+          <div class="step-body"><div class="step-body-inner">
+            <p>Strip the story of its decoration. Grandma said two things:</p>
+            <p>"The largest row that works for both" — that is simply the <b>biggest number that divides both cookie counts evenly</b>. Mathematicians call this the <b>HCF</b> (Highest Common Factor).</p>
+            <p>"The smallest row length where both lines would end together" — that is the <b>smallest number both cookie counts go into evenly</b>. That's the <b>LCM</b> (Lowest Common Multiple).</p>
+            <p>So the story is dressed-up math. Underneath, we know: HCF = 6, LCM = 72, one number = 24, find the other.</p>
+          </div></div>
+        </div>
+
+        <div class="step">
+          <button class="step-btn" onclick="toggleStep(this)">
+            <span class="step-num">ii</span>
+            <span class="step-label">The magic trick grown-ups use</span>
+            <span class="step-chev">›</span>
+          </button>
+          <div class="step-body"><div class="step-body-inner">
+            <p>Here is a fact a kid can verify with any two numbers:</p>
+            <p><i>When you multiply two whole numbers, you get the same answer as multiplying their HCF and LCM.</i></p>
+            <div class="math"><span class="hl">a</span> × <span class="hl">b</span> &nbsp;=&nbsp; <span class="hl">HCF</span> × <span class="hl">LCM</span></div>
+            <p>Try it with 4 and 6 → HCF = 2, LCM = 12 → 2 × 12 = 24, and 4 × 6 = 24. ✓<br>Try 10 and 15 → HCF = 5, LCM = 30 → 5 × 30 = 150, and 10 × 15 = 150. ✓</p>
+            <p>It always works. The HCF is the "shared part" and the LCM is the "combined whole" — multiplied together, they perfectly account for both numbers.</p>
+          </div></div>
+        </div>
+
+        <div class="step">
+          <button class="step-btn" onclick="toggleStep(this)">
+            <span class="step-num">iii</span>
+            <span class="step-label">Plug in what we know, solve for what we don't</span>
+            <span class="step-chev">›</span>
+          </button>
+          <div class="step-body"><div class="step-body-inner">
+            <p>Let Arjun's cookies = <i>x</i>. Then:</p>
+            <div class="math">
+              24 × <span class="hl">x</span> &nbsp;=&nbsp; 6 × 72<br>
+              24 × <span class="hl">x</span> &nbsp;=&nbsp; 432<br>
+              <span class="hl">x</span> &nbsp;=&nbsp; 432 ÷ 24 &nbsp;=&nbsp; <span class="hl">18</span>
+            </div>
+            <p>No algebra needed beyond one division.</p>
+          </div></div>
+        </div>
+
+        <div class="step">
+          <button class="step-btn" onclick="toggleStep(this, true, 1)">
+            <span class="step-num">iv</span>
+            <span class="step-label">Verify it. Always verify it.</span>
+            <span class="step-chev">›</span>
+          </button>
+          <div class="step-body"><div class="step-body-inner">
+            <p>Check: does HCF(24, 18) really equal 6? Both 24 and 18 are divisible by 6 → 24 = 6 × 4, 18 = 6 × 3. No bigger number divides both. ✓</p>
+            <p>Check: does LCM(24, 18) really equal 72? 72 ÷ 24 = 3, 72 ÷ 18 = 4. Both divide it. No smaller number does. ✓</p>
+            <p>The story holds.</p>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="answer-card" id="ans1">
+        <div class="lbl">The answer</div>
+        <div class="ans">Arjun has <em>18 cookies</em>.</div>
+        <div class="verify">Maya's 24 cookies tidy into <b>4 rows of 6</b>. Arjun's 18 cookies tidy into <b>3 rows of 6</b>. Same row size — Grandma's first rule. And 72 is the smallest length the two single-row lineups would both finish at.</div>
+      </div>
+
+      <div class="try-home">
+        <div class="lbl">Try at home</div>
+        <p>Pour out 24 buttons and 18 buttons on the table. Ask the kid: "What's the biggest equal group we can make in both piles, with nothing left over?" Watch them discover 6 with their own hands.</p>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ===================================================== -->
+  <!-- CHAPTER 2: RUNNERS                                    -->
+  <!-- ===================================================== -->
+  <article class="chapter" data-accent="c2">
+    <div class="chapter-head">
+      <div class="chapter-num">Chapter 02 · Schoolyard</div>
+      <h2 class="chapter-title">The <em>Track Sync</em></h2>
+      <div class="chapter-tag">Motion · Timing · Meeting Points</div>
+    </div>
+    <div class="chapter-body">
+
+      <div class="story">
+        <p>Riya and Kabir run laps around the school's oval track every evening. They start side-by-side at the white line.</p>
+        <p><b>Riya runs a lap in 4 minutes.</b> Kabir runs his at some other steady pace — slower than Riya. Their coach has been watching with a stopwatch, and she tells them two things at the end of the week.</p>
+        <p class="pull">"The longest stretch of time that fits cleanly into <i>both</i> your lap times is 2 minutes. And the first time you both finished a lap at exactly the same instant — after the start — was 20 minutes in."</p>
+        <p>Riya looks puzzled. Kabir starts thinking. <b>How long does Kabir take per lap?</b></p>
+      </div>
+
+      <div class="canvas-frame">
+        <canvas id="canvasRunners" width="900" height="380"></canvas>
+        <div class="canvas-controls">
+          <button class="primary" id="runnersBtn" onclick="runners.toggle()">▶ Run them</button>
+          <button onclick="runners.reset()">↺ Reset</button>
+          <button onclick="runners.toFirstMeet()">⤴ Jump to first meeting</button>
+        </div>
+        <div class="canvas-caption">Two runners. Two paces. One quiet rule deciding when they meet.</div>
+      </div>
+
+      <div class="knowns">
+        <div class="known"><div class="k">HCF</div><div class="v">2 min</div></div>
+        <div class="known"><div class="k">LCM</div><div class="v">20 min</div></div>
+        <div class="known"><div class="k">Riya</div><div class="v">4 min</div></div>
+        <div class="known unknown"><div class="k">Kabir</div><div class="v">?</div></div>
+      </div>
+
+      <div class="steps">
+        <div class="steps-head">The reasoning, deliberately.</div>
+        <div class="steps-sub">A track problem is a clock problem in disguise.</div>
+
+        <div class="step">
+          <button class="step-btn" onclick="toggleStep(this)">
+            <span class="step-num">i</span>
+            <span class="step-label">Why is "when they meet again" the LCM?</span>
+            <span class="step-chev">›</span>
+          </button>
+          <div class="step-body"><div class="step-body-inner">
+            <p>For both runners to be at the start line at the same instant, that moment in time has to be a whole number of Riya's laps <i>and</i> a whole number of Kabir's laps. The smallest such moment is, by definition, the <b>LCM</b> of their lap times.</p>
+            <p>The coach said that first joint moment was 20 minutes. So LCM = 20.</p>
+          </div></div>
+        </div>
+
+        <div class="step">
+          <button class="step-btn" onclick="toggleStep(this)">
+            <span class="step-num">ii</span>
+            <span class="step-label">Why is "the longest shared stretch" the HCF?</span>
+            <span class="step-chev">›</span>
+          </button>
+          <div class="step-body"><div class="step-body-inner">
+            <p>"The longest stretch that fits cleanly into both lap times" is asking: what's the biggest unit of time that divides both Riya's 4 minutes and Kabir's unknown lap time without a remainder?</p>
+            <p>That's exactly the <b>HCF</b>. The coach said 2 minutes. So HCF = 2.</p>
+          </div></div>
+        </div>
+
+        <div class="step">
+          <button class="step-btn" onclick="toggleStep(this)">
+            <span class="step-num">iii</span>
+            <span class="step-label">Use the rule</span>
+            <span class="step-chev">›</span>
+          </button>
+          <div class="step-body"><div class="step-body-inner">
+            <div class="math">
+              Riya × Kabir &nbsp;=&nbsp; HCF × LCM<br>
+              4 × <span class="hl">Kabir</span> &nbsp;=&nbsp; 2 × 20<br>
+              4 × <span class="hl">Kabir</span> &nbsp;=&nbsp; 40<br>
+              <span class="hl">Kabir</span> &nbsp;=&nbsp; 10 minutes
+            </div>
+            <p>So Kabir runs a lap every 10 minutes.</p>
+          </div></div>
+        </div>
+
+        <div class="step">
+          <button class="step-btn" onclick="toggleStep(this, true, 2)">
+            <span class="step-num">iv</span>
+            <span class="step-label">Sanity-check by counting laps</span>
+            <span class="step-chev">›</span>
+          </button>
+          <div class="step-body"><div class="step-body-inner">
+            <p>In 20 minutes, Riya runs 20 ÷ 4 = <b>5 laps</b>. Kabir runs 20 ÷ 10 = <b>2 laps</b>. Both whole numbers — so both are at the start line. ✓</p>
+            <p>And before 20 minutes? At 4, 8, 12, 16 minutes only Riya is at the line. At 10 minutes only Kabir is. They never both land there until 20. ✓</p>
+            <p>Hit "Jump to first meeting" on the animation above and watch it happen.</p>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="answer-card" id="ans2">
+        <div class="lbl">The answer</div>
+        <div class="ans">Kabir's lap takes <em>10 minutes</em>.</div>
+        <div class="verify">In 20 minutes Riya completes 5 laps, Kabir completes 2. Both whole numbers — both at the line. The shared 2-minute "heartbeat" divides both 4 and 10. The rule held.</div>
+      </div>
+
+      <div class="try-home">
+        <div class="lbl">Try at home</div>
+        <p>Set two timers — one beeping every 4 seconds, one every 10. Listen for the first moment they beep <i>together</i>. Twenty seconds. The track problem, in a kitchen.</p>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ===================================================== -->
+  <!-- CHAPTER 3: FESTIVAL LIGHTS                            -->
+  <!-- ===================================================== -->
+  <article class="chapter" data-accent="c3">
+    <div class="chapter-head">
+      <div class="chapter-num">Chapter 03 · Festival Night</div>
+      <h2 class="chapter-title">The <em>Diwali Lights</em></h2>
+      <div class="chapter-tag">Rhythm · Patterns · Sky-bright Moments</div>
+    </div>
+    <div class="chapter-body">
+
+      <div class="story">
+        <p>Anaya is decorating her balcony for Diwali. She strings up two long ropes of lights along the railing — one fitted with <b>scarlet bulbs</b>, the other with <b>gold</b>.</p>
+        <p>The scarlet string is set to a known rhythm: <b>it blinks every 8 seconds.</b> The gold string was a gift from her uncle, and she's lost the manual. She has no idea how often it blinks.</p>
+        <p>Sitting on the floor with her little brother, watching the lights against the night, she notices two patterns:</p>
+        <p class="pull">"The whole balcony lights up together every 24 seconds. And the smallest steady tick we can clap to — that fits both rhythms — is 4 seconds."</p>
+        <p>Her brother frowns. "So how often does the gold one blink?" <b>What should Anaya tell him?</b></p>
+      </div>
+
+      <div class="canvas-frame">
+        <canvas id="canvasLights" width="900" height="380"></canvas>
+        <div class="canvas-controls">
+          <button class="primary" id="lightsBtn" onclick="lights.toggle()">▶ Start the lights</button>
+          <button onclick="lights.reset()">↺ Reset</button>
+        </div>
+        <div class="canvas-caption">Watch for the moment both colors flare together. That's the LCM saying hello.</div>
+      </div>
+
+      <div class="knowns">
+        <div class="known"><div class="k">HCF</div><div class="v">4 sec</div></div>
+        <div class="known"><div class="k">LCM</div><div class="v">24 sec</div></div>
+        <div class="known"><div class="k">Scarlet</div><div class="v">8 sec</div></div>
+        <div class="known unknown"><div class="k">Gold</div><div class="v">?</div></div>
+      </div>
+
+      <div class="steps">
+        <div class="steps-head">The reasoning, deliberately.</div>
+        <div class="steps-sub">A festival is just a clock dressed up in colour.</div>
+
+        <div class="step">
+          <button class="step-btn" onclick="toggleStep(this)">
+            <span class="step-num">i</span>
+            <span class="step-label">Translate the festival into math</span>
+            <span class="step-chev">›</span>
+          </button>
+          <div class="step-body"><div class="step-body-inner">
+            <p>"The whole balcony lights up <i>together</i> every 24 seconds" — both strings have completed a whole number of their own cycles. That's the smallest time both blink intervals divide into evenly. <b>LCM = 24</b>.</p>
+            <p>"The smallest steady tick we can clap to that fits both rhythms" — the largest unit of time that divides both blink intervals. <b>HCF = 4</b>.</p>
+            <p>And we know scarlet = 8 seconds. We want gold.</p>
+          </div></div>
+        </div>
+
+        <div class="step">
+          <button class="step-btn" onclick="toggleStep(this)">
+            <span class="step-num">ii</span>
+            <span class="step-label">Same rule, third time</span>
+            <span class="step-chev">›</span>
+          </button>
+          <div class="step-body"><div class="step-body-inner">
+            <p>The rule has not changed. It will never change. Two numbers multiplied equal their HCF times their LCM.</p>
+            <div class="math">
+              Scarlet × Gold &nbsp;=&nbsp; HCF × LCM<br>
+              8 × <span class="hl">Gold</span> &nbsp;=&nbsp; 4 × 24<br>
+              8 × <span class="hl">Gold</span> &nbsp;=&nbsp; 96<br>
+              <span class="hl">Gold</span> &nbsp;=&nbsp; 12 seconds
+            </div>
+          </div></div>
+        </div>
+
+        <div class="step">
+          <button class="step-btn" onclick="toggleStep(this)">
+            <span class="step-num">iii</span>
+            <span class="step-label">Does it really fit?</span>
+            <span class="step-chev">›</span>
+          </button>
+          <div class="step-body"><div class="step-body-inner">
+            <p>HCF(8, 12): both divisible by 4, no bigger number divides both. ✓<br>LCM(8, 12): smallest number divisible by both → 24. ✓</p>
+            <p>Pull up the canvas above. The first moment both bulbs flare together is at second 24. Before that — at 8, 16 (scarlet alone) and 12 (gold alone) — only one is lit.</p>
+          </div></div>
+        </div>
+
+        <div class="step">
+          <button class="step-btn" onclick="toggleStep(this, true, 3)">
+            <span class="step-num">iv</span>
+            <span class="step-label">Why the "4-second clap" matters</span>
+            <span class="step-chev">›</span>
+          </button>
+          <div class="step-body"><div class="step-body-inner">
+            <p>The HCF of 4 seconds is the rhythm both strings <i>secretly</i> share, even though only the scarlet one blinks on 4-second beats and only on every second one of those. The gold blinks on every third 4-second beat. The HCF is the metronome neither string can deny.</p>
+            <p>This is why HCFs show up in music, in machinery, in heart-rates, in tides — wherever two periodic things share a planet.</p>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="answer-card" id="ans3">
+        <div class="lbl">The answer</div>
+        <div class="ans">The gold string blinks every <em>12 seconds</em>.</div>
+        <div class="verify">Scarlet flashes at 8, 16, 24, 32… Gold flashes at 12, 24, 36… They overlap, for the first time, at second 24. And both can be felt on a 4-second tick — the shared heartbeat.</div>
+      </div>
+
+      <div class="try-home">
+        <div class="lbl">Try at home</div>
+        <p>Next time the kid sees two indicator lights blinking — on a router, a charger, a dashboard — ask: "When do you think they'll blink together?" Then time it. You're not doing math anymore. You're noticing it.</p>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <div class="signature">One rule. Three stories. <em>Infinite places to spot it.</em></div>
+    <div class="meta">Made for curious kids and the grown-ups walking beside them.</div>
+  </footer>
+
+</div>
+
+<script>
+/* =================================================================
+   Step toggle (and optional answer reveal on last step)
+   ================================================================= */
+function toggleStep(btn, revealAnswer, chapterNum) {
+  const step = btn.parentElement;
+  step.classList.toggle('open');
+  if (revealAnswer && step.classList.contains('open')) {
+    setTimeout(() => {
+      const el = document.getElementById('ans' + chapterNum);
+      if (el) {
+        el.classList.add('show');
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 350);
+  }
+}
+
+/* =================================================================
+   Canvas helper — handles devicePixelRatio crispness
+   ================================================================= */
+function setupCanvas(canvas) {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  const cssW = canvas.width;
+  const cssH = canvas.height;
+  canvas.width = cssW * dpr;
+  canvas.height = cssH * dpr;
+  canvas.style.width = '100%';
+  canvas.style.aspectRatio = `${cssW} / ${cssH}`;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  return { ctx, W: cssW, H: cssH };
+}
+
+/* =================================================================
+   CANVAS 1 — Cookies
+   ================================================================= */
+const cookies = (() => {
+  const canvas = document.getElementById('canvasCookies');
+  const { ctx, W, H } = setupCanvas(canvas);
+  const C1 = '#B3431E';
+  const STATE = { phase: 'idle', t: 0, running: false };
+
+  function drawCookie(x, y, r) {
+    // body
+    ctx.fillStyle = '#D4894B';
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#8B4513';
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+    // chips
+    ctx.fillStyle = '#3E1F0E';
+    const chips = [[-0.3,-0.2],[0.25,-0.35],[0.1,0.3],[-0.4,0.25],[0.35,0.1]];
+    chips.forEach(([dx,dy]) => {
+      ctx.beginPath();
+      ctx.arc(x+dx*r, y+dy*r, r*0.13, 0, Math.PI*2);
+      ctx.fill();
+    });
+  }
+  function drawJar(cx, cy, label, count, opacity) {
+    ctx.save();
+    ctx.globalAlpha = opacity;
+    // jar
+    const jw = 130, jh = 160;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.strokeStyle = '#1A1A1F';
+    ctx.lineWidth = 2;
+    // body
+    ctx.beginPath();
+    ctx.moveTo(cx - jw/2, cy - jh/2 + 14);
+    ctx.quadraticCurveTo(cx - jw/2 - 6, cy, cx - jw/2, cy + jh/2);
+    ctx.lineTo(cx + jw/2, cy + jh/2);
+    ctx.quadraticCurveTo(cx + jw/2 + 6, cy, cx + jw/2, cy - jh/2 + 14);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    // lid
+    ctx.fillStyle = C1;
+    ctx.fillRect(cx - jw/2 - 6, cy - jh/2 - 4, jw + 12, 14);
+    ctx.strokeRect(cx - jw/2 - 6, cy - jh/2 - 4, jw + 12, 14);
+    // label
+    ctx.fillStyle = '#1A1A1F';
+    ctx.font = '600 13px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(label, cx, cy + 4);
+    ctx.font = 'italic 500 22px Newsreader, serif';
+    ctx.fillStyle = C1;
+    ctx.fillText(count, cx, cy + 30);
+    ctx.restore();
+  }
+  function drawRow(cx, y, n, cookieR, gap, opacity) {
+    ctx.save();
+    ctx.globalAlpha = opacity;
+    const w = n * (cookieR*2) + (n-1) * gap;
+    const startX = cx - w/2 + cookieR;
+    for (let i = 0; i < n; i++) {
+      drawCookie(startX + i * (cookieR*2 + gap), y, cookieR);
+    }
+    ctx.restore();
+  }
+  function drawLabel(cx, y, text, color) {
+    ctx.fillStyle = color;
+    ctx.font = '600 12px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(text, cx, y);
+  }
+
+  function render() {
+    ctx.clearRect(0,0,W,H);
+    // bg subtle dots
+    ctx.fillStyle = 'rgba(179,67,30,0.06)';
+    for (let i = 0; i < W; i += 24) {
+      for (let j = 0; j < H; j += 24) {
+        ctx.beginPath(); ctx.arc(i,j,1,0,Math.PI*2); ctx.fill();
+      }
+    }
+    const phase = STATE.phase;
+    const t = STATE.t;
+    // Maya jar at left, Arjun jar at right
+    const mayaX = W * 0.25, arjunX = W * 0.75, jarY = H * 0.5;
+
+    if (phase === 'idle') {
+      drawJar(mayaX, jarY, 'MAYA', '24', 1);
+      drawJar(arjunX, jarY, 'ARJUN', '?', 1);
+      ctx.fillStyle = '#6B6B72';
+      ctx.font = 'italic 500 14px Newsreader, serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Press "Arrange in rows of 6" to see the answer fall out.', W/2, H - 20);
+    } else if (phase === 'arranging') {
+      // Maya: 4 rows of 6, Arjun: 3 rows of 6
+      const jarOpacity = Math.max(0, 1 - t * 1.5);
+      drawJar(mayaX, jarY, 'MAYA', '24', jarOpacity);
+      drawJar(arjunX, jarY, 'ARJUN', '?', jarOpacity);
+      const cookieR = 12, gap = 6;
+      const rowH = 32;
+      // Maya rows appear one by one
+      for (let r = 0; r < 4; r++) {
+        const appear = Math.min(1, Math.max(0, (t - 0.3 - r * 0.25) * 3));
+        if (appear > 0) {
+          const y = jarY - 1.5 * rowH + r * rowH;
+          drawRow(mayaX, y, 6, cookieR, gap, appear);
+        }
+      }
+      // Maya label
+      const labelAlpha = Math.max(0, Math.min(1, (t - 1.5) * 2));
+      if (labelAlpha > 0) {
+        ctx.save();
+        ctx.globalAlpha = labelAlpha;
+        drawLabel(mayaX, jarY + 100, '4 rows × 6  =  24', C1);
+        ctx.restore();
+      }
+      // Arjun rows appear
+      for (let r = 0; r < 3; r++) {
+        const appear = Math.min(1, Math.max(0, (t - 2.2 - r * 0.25) * 3));
+        if (appear > 0) {
+          const y = jarY - rowH + r * rowH;
+          drawRow(arjunX, y, 6, cookieR, gap, appear);
+        }
+      }
+      const labelAlpha2 = Math.max(0, Math.min(1, (t - 3.2) * 2));
+      if (labelAlpha2 > 0) {
+        ctx.save();
+        ctx.globalAlpha = labelAlpha2;
+        drawLabel(arjunX, jarY + 100, '3 rows × 6  =  18', C1);
+        ctx.restore();
+      }
+      // Bottom note
+      const finalAlpha = Math.max(0, Math.min(1, (t - 3.8) * 2));
+      if (finalAlpha > 0) {
+        ctx.save();
+        ctx.globalAlpha = finalAlpha;
+        ctx.fillStyle = '#1A1A1F';
+        ctx.font = 'italic 500 16px Newsreader, serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Same row size — that\u2019s the HCF, hiding in plain sight.', W/2, H - 22);
+        ctx.restore();
+      }
+    }
+  }
+  let lastTime = 0;
+  function loop(ts) {
+    if (!lastTime) lastTime = ts;
+    const dt = (ts - lastTime) / 1000;
+    lastTime = ts;
+    if (STATE.running && STATE.phase === 'arranging') {
+      STATE.t += dt;
+      if (STATE.t > 5) STATE.running = false;
+    }
+    render();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  return {
+    run() { STATE.phase = 'arranging'; STATE.t = 0; STATE.running = true; },
+    reset() { STATE.phase = 'idle'; STATE.t = 0; STATE.running = false; }
+  };
+})();
+
+/* =================================================================
+   CANVAS 2 — Runners on a track
+   ================================================================= */
+const runners = (() => {
+  const canvas = document.getElementById('canvasRunners');
+  const { ctx, W, H } = setupCanvas(canvas);
+  const C = '#0E7C66';
+  // We map "minutes" to seconds of animation; 1 sec real = 1 minute simulated
+  const RIYA_LAP = 4;   // minutes per lap
+  const KABIR_LAP = 10; // minutes per lap
+  const STATE = { t: 0, running: false, lastFlash: -1 };
+  // Track is an oval; runners travel along its perimeter parametrically
+  const cx = W/2, cy = H/2 + 12;
+  const rx = 280, ry = 110;
+
+  function trackPoint(theta) {
+    return [cx + rx * Math.cos(theta), cy + ry * Math.sin(theta)];
+  }
+  function drawTrack() {
+    // outer
+    ctx.strokeStyle = '#CCC8BD';
+    ctx.lineWidth = 38;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI*2);
+    ctx.stroke();
+    // inner grass
+    ctx.fillStyle = '#E9F5EF';
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, rx - 20, ry - 20, 0, 0, Math.PI*2);
+    ctx.fill();
+    // lane line
+    ctx.strokeStyle = '#FFFFFF';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([6, 8]);
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI*2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // start line — at angle -PI/2 (top)
+    const [sx, sy] = trackPoint(-Math.PI/2);
+    ctx.strokeStyle = '#1A1A1F';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(sx, sy - 20);
+    ctx.lineTo(sx, sy + 20);
+    ctx.stroke();
+    ctx.fillStyle = '#1A1A1F';
+    ctx.font = '600 11px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('START', sx, sy - 28);
+  }
+  function drawRunner(theta, color, label) {
+    const [x, y] = trackPoint(theta);
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x, y, 11, 0, Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle = 'white';
+    ctx.font = '700 11px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(label, x, y + 4);
+  }
+  function drawHUD() {
+    const t = STATE.t;
+    // Time display top-left
+    ctx.fillStyle = '#1A1A1F';
+    ctx.font = '500 13px Inter, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(`Elapsed: ${t.toFixed(1)} min`, 24, 28);
+    // Lap counters
+    const riyaLaps = (t / RIYA_LAP).toFixed(2);
+    const kabirLaps = (t / KABIR_LAP).toFixed(2);
+    ctx.fillStyle = C;
+    ctx.fillText(`Riya: ${riyaLaps} laps`, 24, 50);
+    ctx.fillStyle = '#B3431E';
+    ctx.fillText(`Kabir: ${kabirLaps} laps`, 24, 70);
+    // Flash if both at start (whole lap counts and same instant)
+    const rExact = t % RIYA_LAP;
+    const kExact = t % KABIR_LAP;
+    if (t > 0.1 && rExact < 0.15 && kExact < 0.15) {
+      ctx.fillStyle = 'rgba(14,124,102,0.15)';
+      ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = C;
+      ctx.font = 'italic 500 22px Newsreader, serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`Together at the start — ${Math.round(t)} min`, W/2, H - 24);
+    }
+  }
+  function render() {
+    ctx.clearRect(0,0,W,H);
+    drawTrack();
+    // Position: start at angle = -PI/2, advance clockwise
+    const riyaTheta = -Math.PI/2 + (STATE.t / RIYA_LAP) * Math.PI * 2;
+    const kabirTheta = -Math.PI/2 + (STATE.t / KABIR_LAP) * Math.PI * 2;
+    drawRunner(kabirTheta, '#B3431E', 'K');
+    drawRunner(riyaTheta, C, 'R');
+    drawHUD();
+  }
+  let lastTime = 0;
+  function loop(ts) {
+    if (!lastTime) lastTime = ts;
+    const dt = (ts - lastTime) / 1000;
+    lastTime = ts;
+    if (STATE.running) {
+      // speed: 1 simulated minute every 0.4 real second → 20 min in 8 sec
+      STATE.t += dt * 2.5;
+      if (STATE.t > 22) STATE.running = false;
+    }
+    render();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  return {
+    toggle() {
+      STATE.running = !STATE.running;
+      document.getElementById('runnersBtn').textContent = STATE.running ? '⏸ Pause' : '▶ Run them';
+    },
+    reset() {
+      STATE.t = 0; STATE.running = false;
+      document.getElementById('runnersBtn').textContent = '▶ Run them';
+    },
+    toFirstMeet() {
+      STATE.t = 20; STATE.running = false;
+      document.getElementById('runnersBtn').textContent = '▶ Run them';
+    }
+  };
+})();
+
+/* =================================================================
+   CANVAS 3 — Festival lights
+   ================================================================= */
+const lights = (() => {
+  const canvas = document.getElementById('canvasLights');
+  const { ctx, W, H } = setupCanvas(canvas);
+  const SCARLET = '#D63B2E';
+  const GOLD = '#E0A91B';
+  const SCARLET_INT = 8;  // seconds
+  const GOLD_INT = 12;
+  const STATE = { t: 0, running: false };
+
+  function drawBulb(x, y, color, lit, big) {
+    const r = big ? 26 : 16;
+    // glow
+    if (lit > 0) {
+      const grd = ctx.createRadialGradient(x, y, 4, x, y, r * 2.5);
+      grd.addColorStop(0, color + 'CC');
+      grd.addColorStop(1, color + '00');
+      ctx.fillStyle = grd;
+      ctx.beginPath();
+      ctx.arc(x, y, r * 2.5 * lit, 0, Math.PI*2);
+      ctx.fill();
+    }
+    // bulb body
+    ctx.fillStyle = lit > 0 ? color : '#3C3C42';
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI*2);
+    ctx.fill();
+    // highlight
+    if (lit > 0) {
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.beginPath();
+      ctx.ellipse(x - r*0.3, y - r*0.35, r*0.3, r*0.18, -0.5, 0, Math.PI*2);
+      ctx.fill();
+    }
+    // socket
+    ctx.fillStyle = '#222226';
+    ctx.fillRect(x - r*0.55, y - r - 8, r*1.1, 8);
+  }
+  function drawString(y, intervalSec, color, label, t) {
+    // wire
+    ctx.strokeStyle = '#2A2A30';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(40, y - 20);
+    for (let x = 40; x <= W - 40; x += 10) {
+      ctx.lineTo(x, y - 20 + Math.sin(x * 0.06) * 3);
+    }
+    ctx.stroke();
+    // Determine current "phase" in interval: lit when (t mod interval) < 0.6 (a flash)
+    const phase = t % intervalSec;
+    const flashWindow = 0.8;
+    const isLit = phase < flashWindow;
+    const litLevel = isLit ? Math.max(0, 1 - phase / flashWindow) : 0;
+    // bulbs
+    const n = 7;
+    const startX = 100, endX = W - 100;
+    for (let i = 0; i < n; i++) {
+      const x = startX + (endX - startX) * (i / (n - 1));
+      drawBulb(x, y, color, litLevel);
+    }
+    // label
+    ctx.fillStyle = color;
+    ctx.font = '600 12px Inter, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(label.toUpperCase() + ` · BLINKS EVERY ${intervalSec} SEC`, 40, y - 38);
+  }
+  function drawTimeline(t) {
+    const y = H - 60;
+    const x0 = 60, x1 = W - 60;
+    const span = 28;  // seconds visible
+    const sx = i => x0 + (x1 - x0) * (i / span);
+    // axis
+    ctx.strokeStyle = '#CCC8BD';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
+    // ticks
+    ctx.fillStyle = '#6B6B72';
+    ctx.font = '500 10px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    for (let i = 0; i <= 24; i += 4) {
+      const x = sx(i);
+      ctx.beginPath(); ctx.moveTo(x, y - 4); ctx.lineTo(x, y + 4); ctx.stroke();
+      ctx.fillText(i + 's', x, y + 18);
+    }
+    // Scarlet flashes at 8,16,24
+    [8,16,24].forEach(s => {
+      ctx.fillStyle = s <= t ? SCARLET : SCARLET + '44';
+      ctx.beginPath(); ctx.arc(sx(s), y - 14, 5, 0, Math.PI*2); ctx.fill();
+    });
+    // Gold at 12,24
+    [12,24].forEach(s => {
+      ctx.fillStyle = s <= t ? GOLD : GOLD + '44';
+      ctx.beginPath(); ctx.arc(sx(s), y - 26, 5, 0, Math.PI*2); ctx.fill();
+    });
+    // Together marker at 24
+    if (t >= 23.5) {
+      ctx.strokeStyle = '#6D28D9';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(sx(24), y - 38); ctx.lineTo(sx(24), y + 8); ctx.stroke();
+      ctx.fillStyle = '#6D28D9';
+      ctx.font = 'italic 500 12px Newsreader, serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('together!', sx(24), y - 44);
+    }
+    // playhead
+    const tx = sx(Math.min(t, span));
+    ctx.strokeStyle = '#1A1A1F';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([3, 4]);
+    ctx.beginPath(); ctx.moveTo(tx, y - 36); ctx.lineTo(tx, y + 8); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  function render() {
+    ctx.clearRect(0,0,W,H);
+    // night bg
+    const grd = ctx.createLinearGradient(0, 0, 0, H);
+    grd.addColorStop(0, '#1A0F2E');
+    grd.addColorStop(1, '#2D1F4A');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, W, H);
+    // stars
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    [[60,40],[150,28],[260,52],[400,30],[520,46],[680,32],[780,48],[840,30]].forEach(([x,y]) => {
+      ctx.beginPath(); ctx.arc(x, y, 1.2, 0, Math.PI*2); ctx.fill();
+    });
+    // Strings
+    drawString(120, SCARLET_INT, SCARLET, 'Scarlet', STATE.t);
+    drawString(210, GOLD_INT, GOLD, 'Gold', STATE.t);
+    // Time
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.font = 'italic 500 18px Newsreader, serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(`t = ${STATE.t.toFixed(1)} s`, W - 30, 40);
+    // Sync indicator
+    const phaseS = STATE.t % SCARLET_INT;
+    const phaseG = STATE.t % GOLD_INT;
+    const bothLit = phaseS < 0.8 && phaseG < 0.8 && STATE.t > 0.5;
+    if (bothLit) {
+      ctx.fillStyle = 'rgba(255,255,255,0.06)';
+      ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = '#FFE17A';
+      ctx.font = 'italic 600 20px Newsreader, serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('★ both flare together ★', W/2, 280);
+    }
+    // Timeline (in light wrapper)
+    ctx.fillStyle = 'rgba(255,255,255,0.95)';
+    ctx.fillRect(0, H - 96, W, 96);
+    drawTimeline(STATE.t);
+  }
+  let lastTime = 0;
+  function loop(ts) {
+    if (!lastTime) lastTime = ts;
+    const dt = (ts - lastTime) / 1000;
+    lastTime = ts;
+    if (STATE.running) {
+      STATE.t += dt * 3;  // 3 simulated seconds per real second
+      if (STATE.t > 26) STATE.running = false;
+    }
+    render();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  return {
+    toggle() {
+      STATE.running = !STATE.running;
+      document.getElementById('lightsBtn').textContent = STATE.running ? '⏸ Pause' : '▶ Start the lights';
+    },
+    reset() {
+      STATE.t = 0; STATE.running = false;
+      document.getElementById('lightsBtn').textContent = '▶ Start the lights';
+    }
+  };
+})();
+</script>
+</body>
+</html>
